@@ -17,16 +17,15 @@ export async function authMiddleware(
     {
         try {
             //extract token 
-            const authHeader = req.headers.authorization
-            if(!authHeader || !authHeader.startsWith('Bearer ')){
-                const error = new Error('Missing or invalid authorization header') as any
+            const accessToken = req.cookies.accessToken
+            if(!accessToken){
+                const error = new Error("Unauthorized") as any
                 error.statusCode = 401
                 throw error;
             }
-            const token = authHeader.split(" ")[1]
 
             //verify token 
-            const payload = verifyAccessToken(token)
+            const payload = verifyAccessToken(accessToken)
 
             //fetch user from database
             const user = await User.findById(payload.sub)
