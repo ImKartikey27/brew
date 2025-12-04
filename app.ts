@@ -9,6 +9,7 @@ import errorHandler from "./middlewares/errorHander";
 
 const app = express() as Application
 
+//middlewares
 app.use(helmet())
 app.use(cors({
     origin: '*',
@@ -21,12 +22,12 @@ app.use(rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 200, 
   }))
-app.use(errorHandler)
 
+//routes imports 
+import authRoutes from "./routes/auth.routes"
 
-app.get("/",(req,res) => {
-    res.send("Hello world")
-})
+//use routes
+app.use("/api/v1/auth", authRoutes)
 
 app.use(errorHandler)
 

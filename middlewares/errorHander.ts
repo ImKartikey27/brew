@@ -2,7 +2,6 @@ import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  console.error(err);
 
   const status = err.status || 500;
   const message = err.message || "Internal Server Error";
@@ -12,7 +11,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     return res.status(400).json({ 
       status: "error", 
       message: "Validation error",
-      details: err.issues
+      details: err.issues[0].message
     });
   }
 
