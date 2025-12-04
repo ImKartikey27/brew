@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err);
 
   const status = err.status || 500;
@@ -12,7 +12,7 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     return res.status(400).json({ 
       status: "error", 
       message: "Validation error",
-      details: err.flatten() 
+      details: err.message
     });
   }
 
@@ -37,3 +37,5 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     message
   });
 };
+
+export default errorHandler
