@@ -25,9 +25,10 @@ app.use(rateLimit({
 
 //routes imports 
 import authRoutes from "./routes/auth.routes"
-
+import taskRoutes from "./routes/task.routes"
 //use routes
 app.use("/api/v1/auth", authRoutes)
+app.use("/api/v1/tasks",taskRoutes )
 
 app.use(errorHandler)
 
