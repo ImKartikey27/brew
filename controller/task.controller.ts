@@ -17,16 +17,11 @@ interface taskfilters {
     status?: "To Do" | "In Progress" | "Done";
 }
 
-interface updateTaskBody {
-    title?: string;
-    description?: string;
+// ✅ Add new interface for search query
+interface searchQuery {
+    q?: string;  // search query
     priority?: "low" | "medium" | "high";
     status?: "To Do" | "In Progress" | "Done";
-    dueDate?: Date;
-}
-
-interface taskParams {
-    id: string;
 }
 
 export const createTask = asyncHandler(
@@ -159,4 +154,53 @@ export const deleteTask = asyncHandler(async(
             message: "Task deleted successfully",
         });
     })
+
+export const searchTasks = asyncHandler(
+    async (req: Request, res: Response) => {
+        const user = req.user;
+        if (!user) {
+            const error = new Error("Unauthorized") as any;
+            error.status = 401;
+            throw error;
+        }
+
+        const { q, priority, status } = req.query as searchQuery;
+
+        const filter: any = { owner: user._id };
+
+        if (q && q.trim()) {
+            filter.$text = { $search: q.trim() };
+        }
+
+        // Add optional filters
+        if (priority) {
+            filter.priority = priority;
+        }
+        if (status) {
+            filter.status = status;
+        }
+
+
+        let query = Task.find(filter);
+
+        if (q && q.trim()) {
+            query = query
+                .select({ score: { $meta: "textScore" } })
+                .sort({ score: { $meta: "textScore" } });
+        } else {
+            query = query.sort({ createdAt: -1 });
+        }
+
+        const tasks = await query;
+
+        res.status(200).json({
+            status: "success",
+            data: {
+                count: tasks.length,
+                query: q || null,
+                tasks,
+            },
+        });
+    }
+);
 

@@ -38,15 +38,15 @@ const taskSchema = new Schema<ITask>(
       default: "To Do",
     },
     dueDate: {
-      type: Date
+      type: Date,
     },
   },
   { timestamps: true }
 );
 
-// Compound index covers all query patterns
 taskSchema.index({ owner: 1, status: 1, priority: 1 });
 
-const Task = mongoose.model<ITask>("Task", taskSchema);
+taskSchema.index({ title: "text", description: "text" });
 
+const Task = mongoose.model<ITask>("Task", taskSchema);
 export default Task;

@@ -17,3 +17,10 @@ export const updateTaskSchema = z.object({
 }).refine(data => Object.keys(data).length > 0, {
     message: "At least one field must be provided for update"
 });
+
+
+export const searchTaskSchema = z.object({
+    q: z.string().max(100, "Search query too long").optional(),
+    priority: z.enum(["low", "medium", "high"]).optional(),
+    status: z.enum(["To Do", "In Progress", "Done"]).optional(),
+});
