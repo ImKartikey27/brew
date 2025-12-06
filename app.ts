@@ -15,7 +15,8 @@ app.use(cors({
     origin:[
       "http://localhost:3000",
       "https://www.crmint.tech",
-      "https://crmint.tech"
+      "https://crmint.tech",
+      "https://brew-frontend-chi.vercel.app"
     ],
     credentials: true,
 }))
