@@ -12,7 +12,11 @@ const app = express() as Application
 //middlewares
 app.use(helmet())
 app.use(cors({
-    origin:process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin:[
+      "http://localhost:3000",
+      "https://www.crmint.tech",
+      "https://crmint.tech"
+    ],
     credentials: true,
 }))
 app.use(express.json())
