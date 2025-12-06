@@ -77,6 +77,27 @@ export const login = asyncHandler(async(
 
 })
 
+export const getMe = asyncHandler(async( req: Request, res: Response) => {
+    const user = req.user
+    if(!user){
+        const error = new Error("User not found") as any
+        error.statusCode = 404
+        throw error;
+    }
+
+    res.status(200).json({
+        status: "success",
+        message: "User fetched successfully",
+        data: {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        }
+    })
+})
+
 export const register = asyncHandler(async(
     req: Request<{},{},registerBody> ,
     res: Response) => {
