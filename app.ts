@@ -23,6 +23,13 @@ app.use(rateLimit({
     max: 200, 
   }))
 
+//health check 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        message:"Server is running"
+    })
+})
+
 //routes imports 
 import authRoutes from "./routes/auth.routes"
 import taskRoutes from "./routes/task.routes"
