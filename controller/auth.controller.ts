@@ -51,25 +51,27 @@ export const login = asyncHandler(async(
 
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
 
         res.cookie("accessToken", accessToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             maxAge: 15*60*1000
         })
 
         res.status(200).json({
-            success: true,
+            status: "success",
             message: "User logged in successfully",
             data:{
-                id: user._id,
-                name: user.name,
-                email: user.email
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email
+                }
             }
         })
 
